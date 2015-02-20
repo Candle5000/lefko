@@ -1,5 +1,5 @@
 abstract class Entity {
-  int image, count, score, point;
+  int image, count, score, point, eventFlag;
   float shield, xPosition, yPosition, direction, size, speed;
   boolean friend, delFlag;
   ArrayList entity;
@@ -10,6 +10,7 @@ abstract class Entity {
     count = 0;
     score = 0;
     point = 0;
+    eventFlag = 0;
     shield = 0;
     xPosition = x;
     yPosition = y;

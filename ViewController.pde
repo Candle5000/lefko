@@ -92,6 +92,15 @@ class ViewController {
         case 4001:
           draw400(e, VIRIDIAN);
           break;
+        case 4002:
+          draw400(e, VIOLET);
+          break;
+        case 4003:
+          draw400(e, RED);
+          break;
+        case 4004:
+          draw400(e, CYAN);
+          break;
       }
     }
     
@@ -102,8 +111,14 @@ class ViewController {
         case 6001:
           draw600(s, ORANGE);
           break;
+        case 6002:
+          draw600(s, YELLOW);
+          break;
         case 6011:
           draw601(s, MINT_GREEN);
+          break;
+        case 6021:
+          draw602(s, WINE_RED);
           break;
         case 6601:
           draw660(s, CREAM_YELLOW);
@@ -239,7 +254,9 @@ class ViewController {
     rectMode(CENTER);
     noStroke();
     fill(c[0], c[1], c[2]);
-    triangle(e.xPosition, e.yPosition + 12, e.xPosition - 10, e.yPosition - 7, e.xPosition + 10, e.yPosition - 7);
+    triangle(e.xPosition, e.yPosition + 12, e.xPosition - 12 * cos(radians(30)), e.yPosition - 12 * sin(radians(30)), e.xPosition + 12 * cos(radians(30)), e.yPosition - 12 * sin(radians(30)));
+    triangle(e.xPosition, e.yPosition - 12 * sin(radians(30)), e.xPosition - 11 * cos(radians(30)), e.yPosition + 2, e.xPosition + 11 * cos(radians(30)), e.yPosition + 2);
+    triangle(e.xPosition, e.yPosition - 12 * sin(radians(30)) + 8, e.xPosition - 8 * cos(radians(30)), e.yPosition + 8, e.xPosition + 8 * cos(radians(30)), e.yPosition + 8);
   }
   
   void draw600(Entity e, float[] c) {
@@ -255,6 +272,15 @@ class ViewController {
     stroke(c[0], c[1], c[2]);
     fill(c[0], c[1], c[2]);
     triangle(e.xPosition, e.yPosition - 5, e.xPosition - 2, e.yPosition, e.xPosition + 2, e.yPosition);
+  }
+  
+  void draw602(Entity e, float[] c) {
+    rectMode(CENTER);
+    noStroke();
+    fill(c[0], c[1], c[2]);
+    ellipse(e.xPosition, e.yPosition, 12, 12);
+    triangle(e.xPosition, e.yPosition + 9, e.xPosition - 9 * cos(radians(30)), e.yPosition - 9 * sin(radians(30)), e.xPosition + 9 * cos(radians(30)), e.yPosition - 9 * sin(radians(30)));
+    triangle(e.xPosition, e.yPosition - 9, e.xPosition - 9 * cos(radians(30)), e.yPosition + 9 * sin(radians(30)), e.xPosition + 9 * cos(radians(30)), e.yPosition + 9 * sin(radians(30)));
   }
   
   void draw660(Entity e, float[] c) {

@@ -6,6 +6,7 @@ public class PlayerShot01c extends Entity {
     super(x, y, e, s);
     player = p;
     image = 6601;
+    damage = 800 / fps;
     size = 5;
     position = xPosition - player.xPosition;
     friend = true;
@@ -13,7 +14,6 @@ public class PlayerShot01c extends Entity {
   
   void update() {
     vc.shot.add(this);
-    damage = 600 / fps;
     xPosition = player.xPosition + position;
     yPosition = player.yPosition;
     if(count <= (int)(fps * 1.5)) {

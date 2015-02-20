@@ -1,5 +1,5 @@
 Project LEFKO
-version 0.1.0
+version 0.2.0
 2015/02/08 開発開始
 
 オリジナルのシューティングゲームです。
@@ -36,6 +36,12 @@ Java必須です。
 
 
 ・履歴
+
+2015/02/21 version0.2.0公開
+Enemyのグラフィックを変更
+Enemyの種類を追加
+EnemyのShotの威力を上方修正
+
 2015/02/20 version0.1.0公開
 
 

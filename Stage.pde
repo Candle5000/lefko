@@ -1,5 +1,5 @@
 class Stage extends Statement {
-  int score, scene;
+  int score, scoreBorder, scene, eventFlag;
   ArrayList entity;
   Screen scr;
   Player player;
@@ -7,7 +7,10 @@ class Stage extends Statement {
   Stage() {
     super();
     id = STAGE;
+    score = 0;
+    scoreBorder = 100;
     scene = 0;
+    eventFlag = 0;
     scr = new Screen();
     entity = new ArrayList();
     player = new Player(entity, scr);
@@ -27,18 +30,31 @@ class Stage extends Statement {
         Entity e = (Entity)entity.get(i);
         e.update();
         if(e.delFlag) {
+          if(e.eventFlag != 0) {
+            eventFlag = e.eventFlag;
+          }
           score += e.score;
           entity.remove(i);
         }
       }
       
       // Enemy pop
-      if(scene == 1) {
-        if(frameCount % (int)(fps * 2) == 0) {
+      if(scene == 1 && count > fps * 2) {
+        if(frameCount % (fps * 2) == 0) {
+          if(score >= 60 && (int)random(1, 100) < 20) {
+            entity.add(new Enemy04(random(scr.xStart + scr.getWidth() * 0.1, scr.xEnd - scr.getWidth() * 0.1), scr.yStart, entity, scr, player));
+          } else if(score >= 20 && (int)random(1, 100) < 25) {
+            entity.add(new Enemy02(random(scr.xStart + scr.getWidth() * 0.1, scr.xEnd - scr.getWidth() * 0.1), scr.yStart, entity, scr, player));
+          } else {
+            entity.add(new Enemy01(random(scr.xStart + scr.getWidth() * 0.1, scr.xEnd - scr.getWidth() * 0.1), scr.yStart, entity, scr, player));
+          }
+        }
+        if((int)(frameCount + fps) % (fps * 2) == 0 && (int)random(0,99) < 40) {
           entity.add(new Enemy01(random(scr.xStart + scr.getWidth() * 0.1, scr.xEnd - scr.getWidth() * 0.1), scr.yStart, entity, scr, player));
         }
-        if((int)(frameCount + fps) % (int)(fps * 2) == 0 && (int)random(0,99) < 50) {
-          entity.add(new Enemy01(random(scr.xStart + scr.getWidth() * 0.1, scr.xEnd - scr.getWidth() * 0.1), scr.yStart, entity, scr, player));
+      } else if(scene == 2) {
+        if(count == fps * 8) {
+          entity.add(new Enemy03(scr.xStart + scr.getWidth() * 0.5, scr.yStart + scr.getHeight() * 0.2, entity, scr, player));
         }
       }
       
@@ -46,6 +62,14 @@ class Stage extends Statement {
       if(scene == 0 && count > fps * 2) {
         scene++;
         count = -1;
+      } else if(scene == 1 && score >= scoreBorder) {
+        scene++;
+        scoreBorder += 100;
+        count = -1;
+      } else if(scene == 2 && eventFlag == 1) {
+        scene--;
+        count = -1;
+        eventFlag = 0;
       }
       
       // GameOver
