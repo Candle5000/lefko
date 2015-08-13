@@ -9,7 +9,7 @@ public class Enemy05 extends Entity {
     image = 4005;
     point = 20;
     eventFlag = 1;
-    shield = 6000;
+    shield = 8000;
     size = 9;
     speed = 35 / fps;
     destinationX = random(scr.xStart + scr.getWidth() * 0.1, scr.xEnd - scr.getWidth() * 0.1);

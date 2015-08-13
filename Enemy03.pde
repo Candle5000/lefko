@@ -24,7 +24,7 @@ public class Enemy03 extends Entity {
     if(!startFlag) {
       if(count > fps * 2) {
         startFlag = true;
-        shield = 4000;
+        shield = 5000;
         count = 0;
       } else {
         count++;

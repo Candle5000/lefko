@@ -32,8 +32,8 @@ class ViewController {
   final float PEARL_GREY[] = {0xaa, 0xaa, 0xaa};
   final float PANSY[] = {0x43, 0x31, 0x71};
   final float VIRIDIAN[] = {0x00, 0x6d, 0x56};
-  final float PEACH[] = {0xe8, 0xbd, 0xa5};
-  final float PINK[] = {0xea, 0x91, 0x98};
+  final float PEACH[] = {0xf8, 0x81, 0xa0};
+  final float PINK[] = {0xf0, 0x68, 0x74};
   final float BROWN[] = {0x6d, 0x4c, 0x33};
   final float BLACK[] = {0x00, 0x00, 0x00};
   final float BLUE[] = {0x00, 0x6f, 0xab};
@@ -124,6 +124,15 @@ class ViewController {
         case 6011:
           draw601(s, MINT_GREEN);
           break;
+        case 6012:
+          draw601(s, PINK);
+          break;
+        case 6013:
+          draw601(s, PEACH);
+          break;
+        case 6014:
+          draw601(s, ECRU_BEIGE);
+          break;
         case 6021:
           draw602(s, WINE_RED);
           break;
@@ -133,6 +142,8 @@ class ViewController {
         case 6601:
           draw660(s, CREAM_YELLOW);
           break;
+        case 6801:
+          draw680(s, IRON_BLUE);
       }
     }
     
@@ -281,16 +292,16 @@ class ViewController {
     strokeWeight(1);
     stroke(c[0], c[1], c[2]);
     fill(c[0], c[1], c[2]);
-    triangle(e.xPosition, e.yPosition - 5, e.xPosition - 2, e.yPosition, e.xPosition + 2, e.yPosition);
+    triangle(e.xPosition + 1.75 * e.size * cos(e.direction), e.yPosition + 1.75 * e.size * sin(e.direction), e.xPosition + e.size * cos(e.direction - radians(120)), e.yPosition + e.size * sin(e.direction - radians(120)), e.xPosition + e.size * cos(e.direction + radians(120)), e.yPosition + e.size * sin(e.direction + radians(120)));
   }
   
   void draw602(Entity e, float[] c) {
     rectMode(CENTER);
     noStroke();
     fill(c[0], c[1], c[2]);
-    ellipse(e.xPosition, e.yPosition, 12, 12);
-    triangle(e.xPosition, e.yPosition + 9, e.xPosition - 9 * cos(radians(30)), e.yPosition - 9 * sin(radians(30)), e.xPosition + 9 * cos(radians(30)), e.yPosition - 9 * sin(radians(30)));
-    triangle(e.xPosition, e.yPosition - 9, e.xPosition - 9 * cos(radians(30)), e.yPosition + 9 * sin(radians(30)), e.xPosition + 9 * cos(radians(30)), e.yPosition + 9 * sin(radians(30)));
+    ellipse(e.xPosition, e.yPosition, 16, 16);
+    triangle(e.xPosition, e.yPosition + 12, e.xPosition - 12 * cos(radians(30)), e.yPosition - 12 * sin(radians(30)), e.xPosition + 12 * cos(radians(30)), e.yPosition - 12 * sin(radians(30)));
+    triangle(e.xPosition, e.yPosition - 12, e.xPosition - 12 * cos(radians(30)), e.yPosition + 12 * sin(radians(30)), e.xPosition + 12 * cos(radians(30)), e.yPosition + 12 * sin(radians(30)));
   }
   
   void draw603(Entity e, float[] c) {
@@ -312,5 +323,12 @@ class ViewController {
     strokeWeight((abs(e.count - fps * 0.75) < (fps * 0.45)) ? 4 : 4 - 3 * (abs(e.count - fps * 0.75) - fps * 0.45) / (fps * 0.3));
     stroke(c[0], c[1], c[2]);
     line(e.xPosition, e.yPosition, e.xPosition, 0);
+  }
+  
+  void draw680(Entity e, float[] c) {
+    rectMode(CENTER);
+    fill(c[0], c[1], c[2], 40 + abs(e.count % (int)fps - fps / 2) / (fps / 2) * 120);
+    noStroke();
+    ellipse(e.xPosition, e.yPosition, e.size * 2, e.size * 2);
   }
 }

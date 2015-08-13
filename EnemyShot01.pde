@@ -1,12 +1,12 @@
 class EnemyShot01 extends Entity {
   final float shotData[][] = {
     // image, damage, size, speed
-    {6001, 40, 3, 255},
-    {6021, 120, 5, 180},
-    {6002, 100, 3, 400},
-    {6003, 60, 3, 120},
-    {6003, 60, 3, 240},
-    {6031, 150, 30, 180}
+    {6001, 40, 3, 300},
+    {6021, 120, 10, 200},
+    {6002, 100, 3, 500},
+    {6003, 60, 3, 150},
+    {6003, 60, 3, 250},
+    {6031, 150, 30, 200}
   };
   float damage;
   Player player;
@@ -19,14 +19,23 @@ class EnemyShot01 extends Entity {
     direction = dir;
     size = shotData[type][2];
     speed = shotData[type][3] / fps;
+    canReflect = true;
   }
   
   void update() {
     vc.shot.add(this);
     move();
-    if(getDistance(player.xPosition, player.yPosition) <= (size + player.size)) {
+    if(!friend && getDistance(player.xPosition, player.yPosition) <= (size + player.size)) {
       player.hit(damage);
       delFlag = true;
+    } else if(friend) {
+      for(int i = entity.size() - 1; i >= 0; i--) {
+        Entity e = (Entity)entity.get(i);
+        if(!e.friend && e.shield != 0 && getDistance(e) <= (size + e.size)) {
+          e.hit(damage);
+          delFlag = true;
+        }
+      }
     }
   }
 }

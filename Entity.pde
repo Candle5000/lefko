@@ -1,7 +1,7 @@
 abstract class Entity {
   int image, count, score, point, eventFlag;
   float shield, xPosition, yPosition, direction, size, speed, maxSpeed;
-  boolean friend, delFlag;
+  boolean friend, delFlag, canReflect;
   ArrayList entity;
   Screen scr;
   
@@ -20,6 +20,7 @@ abstract class Entity {
     maxSpeed = 0;
     friend = false;
     delFlag = false;
+    canReflect = false;
     entity = e;
     scr = s;
   }

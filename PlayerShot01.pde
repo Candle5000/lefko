@@ -12,7 +12,7 @@ public class PlayerShot01 extends Entity {
   
   void update() {
     vc.shot.add(this);
-    speed = 255 / fps;
+    speed = 300 / fps;
     move();
     for(int i = entity.size() - 1; i >= 0; i--) {
       Entity e = (Entity)entity.get(i);

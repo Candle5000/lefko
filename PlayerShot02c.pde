@@ -3,17 +3,17 @@ public class PlayerShot02c extends Entity {
   
   PlayerShot02c(float x, float y, ArrayList e, Screen s) {
     super(x, y, e, s);
-    image = 6011;
-    damage = 2000;
+    image = 6013;
+    damage = 1000;
     direction = radians(270);
-    size = 12;
+    size = 10;
     speed = 255 / fps;
     friend = true;
   }
   
   PlayerShot02c(float x, float y, ArrayList e, Screen s, float dmg, float dir, float sz) {
     super(x, y, e, s);
-    image = 6011;
+    image = 6013;
     damage = dmg;
     direction = dir;
     size = sz;
@@ -32,9 +32,9 @@ public class PlayerShot02c extends Entity {
       }
     }
     
-    if(!delFlag && count > fps * 0.15 && damage > 200) {
-      entity.add(new PlayerShot02c(xPosition, yPosition, entity, scr, damage * 0.75, direction - radians(15), size / 2));
-      entity.add(new PlayerShot02c(xPosition, yPosition, entity, scr, damage * 0.75, direction + radians(15), size / 2));
+    if(!delFlag && count > fps * 0.15 && damage > 150) {
+      entity.add(new PlayerShot02c(xPosition, yPosition, entity, scr, damage * 0.7, direction - radians(15), size * 0.9));
+      entity.add(new PlayerShot02c(xPosition, yPosition, entity, scr, damage * 0.7, direction + radians(15), size * 0.9));
       delFlag = true;
     }
     
