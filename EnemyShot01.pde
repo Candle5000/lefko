@@ -3,7 +3,10 @@ class EnemyShot01 extends Entity {
     // image, damage, size, speed
     {6001, 40, 3, 255},
     {6021, 120, 5, 180},
-    {6002, 100, 3, 400}
+    {6002, 100, 3, 400},
+    {6003, 60, 3, 120},
+    {6003, 60, 3, 240},
+    {6031, 150, 30, 180}
   };
   float damage;
   Player player;

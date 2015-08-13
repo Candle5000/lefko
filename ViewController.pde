@@ -16,6 +16,7 @@ class ViewController {
   final float COCOA_BROWN[] = {0x70, 0x4b, 0x38};
   final float COBALT_GREEN[] = {0x09, 0xc2, 0x89};
   final float COBALT_BLUE[] = {0x00, 0x62, 0xa0};
+  final float GOLD[] = {0xff, 0xd7, 0x00};
   final float SALMON_PINK[] = {0xff, 0x9e, 0x8c};
   final float SEA_GREEN[] = {0x97, 0xb6, 0x4d};
   final float CYAN[] = {0x00, 0x9c, 0xd1};
@@ -101,6 +102,9 @@ class ViewController {
         case 4004:
           draw400(e, CYAN);
           break;
+        case 4005:
+          draw400(e, GOLD);
+          break;
       }
     }
     
@@ -114,11 +118,17 @@ class ViewController {
         case 6002:
           draw600(s, YELLOW);
           break;
+        case 6003:
+          draw600(s, SALMON_PINK);
+          break;
         case 6011:
           draw601(s, MINT_GREEN);
           break;
         case 6021:
           draw602(s, WINE_RED);
+          break;
+        case 6031:
+          draw603(s, SALMON_PINK);
           break;
         case 6601:
           draw660(s, CREAM_YELLOW);
@@ -281,6 +291,20 @@ class ViewController {
     ellipse(e.xPosition, e.yPosition, 12, 12);
     triangle(e.xPosition, e.yPosition + 9, e.xPosition - 9 * cos(radians(30)), e.yPosition - 9 * sin(radians(30)), e.xPosition + 9 * cos(radians(30)), e.yPosition - 9 * sin(radians(30)));
     triangle(e.xPosition, e.yPosition - 9, e.xPosition - 9 * cos(radians(30)), e.yPosition + 9 * sin(radians(30)), e.xPosition + 9 * cos(radians(30)), e.yPosition + 9 * sin(radians(30)));
+  }
+  
+  void draw603(Entity e, float[] c) {
+    rectMode(CENTER);
+    noFill();
+    strokeWeight(16);
+    stroke(c[0], c[1], c[2], 85);
+    ellipse(e.xPosition, e.yPosition, 60, 60);
+    strokeWeight(12);
+    stroke(c[0], c[1], c[2], 85);
+    ellipse(e.xPosition, e.yPosition, 60, 60);
+    strokeWeight(8);
+    stroke(c[0], c[1], c[2], 85);
+    ellipse(e.xPosition, e.yPosition, 60, 60);
   }
   
   void draw660(Entity e, float[] c) {

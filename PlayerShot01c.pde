@@ -6,7 +6,7 @@ public class PlayerShot01c extends Entity {
     super(x, y, e, s);
     player = p;
     image = 6601;
-    damage = 800 / fps;
+    damage = 1000 / fps;
     size = 5;
     position = xPosition - player.xPosition;
     friend = true;

@@ -1,5 +1,5 @@
 class Player extends Entity {
-  int chargeEffectCount;
+  int chargeEffectCount, weapon;
   float charge, chargeMax, shieldMax, energy, energyMax, enReg;
   boolean shotFlag;
   ArrayList entity;
@@ -8,13 +8,14 @@ class Player extends Entity {
     super((s.xStart + s.xEnd) * 0.5, s.yStart + s.getHeight() * 0.95, e, s);
     entity = e;
     scr = s;
+    weapon = 1;
     charge = 0;
-    chargeMax = (int)fps * 2;
+    chargeMax = (int)fps * 1.5;
     shield = 1000;
     shieldMax = 1000;
     energy = 500;
     energyMax = 1000;
-    size = 8;
+    size = 6;
     speed = 165 / fps;
     enReg = 60 / fps;
     friend = true;
@@ -51,19 +52,33 @@ class Player extends Entity {
         shotFlag = true;
       }
     } else if(shotFlag) {
-      if(energy >= 300 && charge >= chargeMax) {
-        // Charge Shot
-        energy -= 300;
-        entity.add(new PlayerShot01c(xPosition - 10, yPosition - 2, entity, scr, this));
-        entity.add(new PlayerShot01c(xPosition + 10, yPosition - 2, entity, scr, this));
-      } else if(energy >= 30) {
-        // Normal Shot
-        energy -= 30;
-        entity.add(new PlayerShot01(xPosition - 10, yPosition - 2, entity, scr));
-        entity.add(new PlayerShot01(xPosition + 10, yPosition - 2, entity, scr));
+      if(weapon == 1) {
+        if(energy >= 400 && charge >= chargeMax) {
+          // Charge Shot
+          energy -= 400;
+          entity.add(new PlayerShot01c(xPosition - 10, yPosition - 2, entity, scr, this));
+          entity.add(new PlayerShot01c(xPosition + 10, yPosition - 2, entity, scr, this));
+        } else if(energy >= 30) {
+          // Normal Shot
+          energy -= 30;
+          entity.add(new PlayerShot01(xPosition - 10, yPosition - 2, entity, scr));
+          entity.add(new PlayerShot01(xPosition + 10, yPosition - 2, entity, scr));
+        }
+      } else if(weapon == 2) {
+        if(energy >= 350 && charge >= chargeMax) {
+          // Charge Shot
+          energy -= 350;
+          entity.add(new PlayerShot02c(xPosition - 10, yPosition - 2, entity, scr));
+        } else if(energy >= 50) {
+          // Normal Shot
+          energy -= 50;
+          entity.add(new PlayerShot02(xPosition, yPosition - 2, entity, scr));
+        }
       }
       shotFlag = false;
       charge = 0;
+    } else if(mousePressed && mouseButton == RIGHT) {
+      weapon = (weapon == 2) ? 1 : weapon + 1;
     }
   }
 }

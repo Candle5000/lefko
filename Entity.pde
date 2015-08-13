@@ -1,6 +1,6 @@
 abstract class Entity {
   int image, count, score, point, eventFlag;
-  float shield, xPosition, yPosition, direction, size, speed;
+  float shield, xPosition, yPosition, direction, size, speed, maxSpeed;
   boolean friend, delFlag;
   ArrayList entity;
   Screen scr;
@@ -17,6 +17,7 @@ abstract class Entity {
     direction = radians(90);
     size = 0;
     speed = 0;
+    maxSpeed = 0;
     friend = false;
     delFlag = false;
     entity = e;
@@ -32,7 +33,7 @@ abstract class Entity {
       delFlag = true;
     }
   }
-
+  
   void track(float x, float y) {
     direction = getDirection(x, y);
     if(getDistance(x, y) > speed) {
@@ -50,6 +51,26 @@ abstract class Entity {
     } else {
       xPosition = target.xPosition;
       yPosition = target.yPosition;
+    }
+  }
+  
+  void smoothTrack(float x, float y) {
+    if(getDistance(x, y) < maxSpeed) {
+      speed = (speed > maxSpeed * 0.1) ? speed - maxSpeed * 0.1 : maxSpeed * 0.1;
+    }
+    track(x, y);
+    if(xPosition == x && yPosition == y) {
+      speed = maxSpeed;
+    }
+  }
+  
+  void smoothTrack(Entity target) {
+    if(getDistance(target) < maxSpeed) {
+      speed = (speed > maxSpeed * 0.1) ? speed - maxSpeed * 0.1 : maxSpeed * 0.1;
+    }
+    track(target);
+    if(xPosition == target.xPosition && yPosition == target.yPosition) {
+      speed = maxSpeed;
     }
   }
   

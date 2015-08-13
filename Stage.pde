@@ -1,5 +1,5 @@
 class Stage extends Statement {
-  int score, scoreBorder, scene, eventFlag;
+  int score, scoreBorder, scene, eventFlag, boss;
   ArrayList entity;
   Screen scr;
   Player player;
@@ -11,6 +11,7 @@ class Stage extends Statement {
     scoreBorder = 100;
     scene = 0;
     eventFlag = 0;
+    boss = 0;
     scr = new Screen();
     entity = new ArrayList();
     player = new Player(entity, scr);
@@ -54,7 +55,16 @@ class Stage extends Statement {
         }
       } else if(scene == 2) {
         if(count == fps * 8) {
-          entity.add(new Enemy03(scr.xStart + scr.getWidth() * 0.5, scr.yStart + scr.getHeight() * 0.2, entity, scr, player));
+          switch(boss) {
+            case 0:
+              entity.add(new Enemy03(scr.xStart + scr.getWidth() * 0.5, scr.yStart + scr.getHeight() * 0.2, entity, scr, player));
+              boss++;
+              break;
+            case 1:
+              entity.add(new Enemy05(scr.xStart + scr.getWidth() * 0.5, scr.yStart + scr.getHeight() * 0.2, entity, scr, player));
+              boss--;
+              break;
+          }
         }
       }
       
