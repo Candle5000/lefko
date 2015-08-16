@@ -5,7 +5,9 @@ int nextState;
 final int TITLEMENU = 0;
 final int STAGE = 1;
 float fps;
+boolean mouseEnabled;
 ViewController vc;
+KeyController kc;
 Statement statement;
 
 void setup() {
@@ -13,7 +15,9 @@ void setup() {
   size(800, 800);
   smooth();
   frameRate(fps);
+  mouseEnabled = false;
   vc = new ViewController();
+  kc = new KeyController();
   statement = new TitleMenu();
 }
 
@@ -33,4 +37,12 @@ void draw() {
   
   // draw graphic
   vc.update();
+}
+
+void keyPressed() {
+  kc.pressed(key, keyCode);
+}
+
+void keyReleased() {
+  kc.released(key, keyCode);
 }

@@ -2,3 +2,4 @@ application.*
 *.zip
 lefko.linux*
 lefko.windows*
+lefko-*

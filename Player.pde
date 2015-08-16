@@ -1,8 +1,9 @@
 class Player extends Entity {
   int chargeEffectCount, weapon;
   float charge, chargeMax, shieldMax, energy, energyMax, enReg;
-  boolean shotFlag, changeFlag;
+  boolean shotFlag, changeFlag, shotOn, changeOn;
   ArrayList entity;
+  static final float SPEED_N = 165;
   
   Player(ArrayList e, Screen s) {
     super((s.xStart + s.xEnd) * 0.5, s.yStart + s.getHeight() * 0.95, e, s);
@@ -16,7 +17,7 @@ class Player extends Entity {
     energy = 500;
     energyMax = 1000;
     size = 6;
-    speed = 165 / fps;
+    speed = SPEED_N / fps;
     enReg = 60 / fps;
     friend = true;
     shotFlag = false;
@@ -33,20 +34,50 @@ class Player extends Entity {
     }
     
     // 移動
-    track(mouseX, mouseY);
-    if(xPosition < scr.xStart) {
-      xPosition = scr.xStart;
-    } else if (xPosition > scr.xEnd) {
-      xPosition = scr.xEnd;
-    }
-    if(yPosition < scr.yStart) {
-      yPosition = scr.yStart;
-    } else if (yPosition > scr.yEnd) {
-      yPosition = scr.yEnd;
+    if(mouseEnabled) {
+      track(mouseX, mouseY);
+      if(xPosition < scr.xStart) {
+        xPosition = scr.xStart;
+      } else if (xPosition > scr.xEnd) {
+        xPosition = scr.xEnd;
+      }
+      if(yPosition < scr.yStart) {
+        yPosition = scr.yStart;
+      } else if (yPosition > scr.yEnd) {
+        yPosition = scr.yEnd;
+      }
+    } else {
+      if(kc.up.isPressed || kc.down.isPressed || kc.left.isPressed || kc.right.isPressed) {
+        if(kc.up.isPressed && kc.right.isPressed) {
+          direction = radians(315);
+        } else if(kc.up.isPressed && kc.left.isPressed) {
+          direction = radians(225);
+        } else if(kc.down.isPressed && kc.right.isPressed) {
+          direction = radians(45);
+        } else if(kc.down.isPressed && kc.left.isPressed) {
+          direction = radians(135);
+        } else if(kc.up.isPressed) {
+          direction = radians(270);
+        } else if(kc.down.isPressed) {
+          direction = radians(90);
+        } else if(kc.right.isPressed) {
+          direction = radians(0);
+        } else if(kc.left.isPressed) {
+          direction = radians(180);
+        }
+        move();
+      }
     }
     
     // Shot
-    if (mousePressed && mouseButton == LEFT) {
+    if(mouseEnabled) {
+      shotOn = (mousePressed && mouseButton == LEFT);
+      changeOn = (mousePressed && mouseButton == RIGHT);
+    } else {
+      shotOn = kc.enter.isPressed;
+      changeOn = kc.cancel.isPressed;
+    }
+    if (shotOn) {
       if(shotFlag && charge < (chargeMax * 1.5)) {
         charge++;
       } else {
@@ -97,7 +128,7 @@ class Player extends Entity {
       shotFlag = false;
       changeFlag = false;
       charge = 0;
-    } else if(mousePressed && mouseButton == RIGHT) {
+    } else if(changeOn) {
       changeFlag = true;
     } else if(changeFlag) {
       weapon = (weapon == 3) ? 1 : weapon + 1;
