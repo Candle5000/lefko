@@ -34,18 +34,8 @@ class Player extends Entity {
     }
     
     // 移動
-    if(mouseEnabled) {
+    if(sd.mouseEnabled) {
       track(mouseX, mouseY);
-      if(xPosition < scr.xStart) {
-        xPosition = scr.xStart;
-      } else if (xPosition > scr.xEnd) {
-        xPosition = scr.xEnd;
-      }
-      if(yPosition < scr.yStart) {
-        yPosition = scr.yStart;
-      } else if (yPosition > scr.yEnd) {
-        yPosition = scr.yEnd;
-      }
     } else {
       if(kc.up.isPressed || kc.down.isPressed || kc.left.isPressed || kc.right.isPressed) {
         if(kc.up.isPressed && kc.right.isPressed) {
@@ -68,9 +58,19 @@ class Player extends Entity {
         move();
       }
     }
+    if(xPosition < scr.xStart) {
+      xPosition = scr.xStart;
+    } else if (xPosition > scr.xEnd) {
+      xPosition = scr.xEnd;
+    }
+    if(yPosition < scr.yStart) {
+      yPosition = scr.yStart;
+    } else if (yPosition > scr.yEnd) {
+      yPosition = scr.yEnd;
+    }
     
     // Shot
-    if(mouseEnabled) {
+    if(sd.mouseEnabled) {
       shotOn = (mousePressed && mouseButton == LEFT);
       changeOn = (mousePressed && mouseButton == RIGHT);
     } else {

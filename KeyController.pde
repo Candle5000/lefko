@@ -1,16 +1,17 @@
 class KeyController {
-  Key up, down, left, right, shift, enter, cancel, spc;
+  Key up, down, left, right, shift, enter, cancel, spc, esc;
   ArrayList<Key> keys;
   
   KeyController() {
-    up = new Key("UP", (char)CODED, UP);
-    down = new Key("DOWN", (char)CODED, DOWN);
-    left = new Key("LEFT", (char)CODED, LEFT);
-    right = new Key("RIGHT", (char)CODED, RIGHT);
-    shift = new Key("SHIFT", (char)CODED, SHIFT);
-    enter = new Key("ENTER", 'z', 0);
-    cancel = new Key("CANCEL", 'x', 0);
-    spc = new Key("SPC", ' ', 0);
+    up = new Key("UP", sd.upKey, sd.upCode);
+    down = new Key("DOWN", sd.downKey, sd.downCode);
+    left = new Key("LEFT", sd.leftKey, sd.leftCode);
+    right = new Key("RIGHT", sd.rightKey, sd.rightCode);
+    shift = new Key("SHIFT", sd.shiftKey, sd.shiftCode);
+    enter = new Key("ENTER", sd.enterKey, sd.enterCode);
+    cancel = new Key("CANCEL", sd.cancelKey, sd.cancelCode);
+    spc = new Key("SPC", sd.spcKey, sd.spcCode);
+    esc = new Key("ESC", sd.escKey, sd.escCode);
     keys = new ArrayList<Key>();
     keys.add(up);
     keys.add(down);

@@ -5,7 +5,7 @@ int nextState;
 final int TITLEMENU = 0;
 final int STAGE = 1;
 float fps;
-boolean mouseEnabled;
+SaveData sd;
 ViewController vc;
 KeyController kc;
 Statement statement;
@@ -15,7 +15,7 @@ void setup() {
   size(800, 800);
   smooth();
   frameRate(fps);
-  mouseEnabled = false;
+  sd = new SaveData();
   vc = new ViewController();
   kc = new KeyController();
   statement = new TitleMenu();
