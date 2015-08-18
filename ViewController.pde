@@ -56,12 +56,14 @@ class ViewController {
   ArrayList textButton;
   ArrayList enemy;
   ArrayList shot;
+  ArrayList effect;
   Stage stage;
   
   ViewController() {
     textButton = new ArrayList();
     enemy = new ArrayList();
     shot = new ArrayList();
+    effect = new ArrayList();
   }
   
   void update() {
@@ -148,7 +150,17 @@ class ViewController {
     }
     
     drawPlayer(MINT_GREEN, LEMON_YELLOW, SNOW_WHITE);
-    drawChargeEffect(CANARY_YELLOW);
+    //drawChargeEffect(CANARY_YELLOW);
+    
+    //draw PlayerEffect
+    for(int i = effect.size() - 1; i >= 0; i--) {
+      Effect e = (Effect)effect.get(i);
+      switch(e.image) {
+        case 8001:
+          draw800(e, CANARY_YELLOW);
+          break;
+      }
+    }
     
     drawStageFade(BLACK);
     drawStageText(BLUE, YELLOW);
@@ -157,6 +169,7 @@ class ViewController {
     
     enemy.clear();
     shot.clear();
+    effect.clear();
   }
   
   void drawTitle(float[] fc) {
@@ -193,16 +206,19 @@ class ViewController {
   }
   
   void drawPlayerInfo(float[] bc, float[] fc) {
-    textAlign(CENTER, CENTER);
     rectMode(CENTER);
     noStroke();
     textSize(width * 0.02);
     fill(bc[0], bc[1], bc[2]);
     rect(width * 0.1, height * 0.18, width * 0.16, height * 0.03);
+    rect(width * 0.1, height * 0.24, width * 0.16, height * 0.03);
     rect(width * 0.9, height * 0.18, width * 0.17, height * 0.03);
     rect(width * 0.9, height * 0.24, width * 0.17, height * 0.03);
+    textAlign(RIGHT, CENTER);
     fill(fc[0], fc[1], fc[2]);
-    text("SCORE:" + nf(stage.score, 5), width * 0.1, height * 0.18);
+    text("BEST:" + nf(sd.bestScore, 5), width * 0.179, height * 0.18);
+    text("SCORE:" + nf(stage.score, 5), width * 0.179, height * 0.24);
+    textAlign(CENTER, CENTER);
     fill(fc[0], fc[1] * (stage.player.shield / stage.player.shieldMax), fc[2] * (stage.player.shield / stage.player.shieldMax));
     text("SH:" + (nf((stage.player.shield < 0) ? 0 : (int)stage.player.shield, 4)) + "/" + nf((int)stage.player.shieldMax, 4), width * 0.9, height * 0.18);
     fill(fc[0], fc[1] * (stage.player.energy / stage.player.energyMax), fc[2] * (stage.player.energy / stage.player.energyMax));
@@ -251,24 +267,31 @@ class ViewController {
     if(!stage.player.delFlag) {
       rectMode(CENTER);
       noStroke();
-      fill(c1[0], c1[1], c1[2]);
+      fill(c1[0] + (255 - c1[0]) * stage.player.damageCount / stage.player.damageCountMax, c1[1] + (0 - c1[1]) * stage.player.damageCount / stage.player.damageCountMax, c1[2] + (0 - c1[2]) * stage.player.damageCount / stage.player.damageCountMax);
       triangle(stage.player.xPosition - 10, stage.player.yPosition - 2, stage.player.xPosition - 12, stage.player.yPosition + 6, stage.player.xPosition - 8, stage.player.yPosition + 6);
       triangle(stage.player.xPosition + 10, stage.player.yPosition - 2, stage.player.xPosition + 8, stage.player.yPosition + 6, stage.player.xPosition + 12, stage.player.yPosition + 6);
-      fill(c2[0], c2[1], c2[2]);
+      fill(c2[0] + (255 - c2[0]) * stage.player.damageCount / stage.player.damageCountMax, c2[1] + (0 - c2[1]) * stage.player.damageCount / stage.player.damageCountMax, c2[2] + (0 - c2[2]) * stage.player.damageCount / stage.player.damageCountMax);
       triangle(stage.player.xPosition, stage.player.yPosition - 10, stage.player.xPosition - 8, stage.player.yPosition + 6, stage.player.xPosition + 8, stage.player.yPosition + 6);
-      fill(c3[0], c3[1], c3[2]);
+      fill(c3[0] + (255 - c3[0]) * stage.player.damageCount / stage.player.damageCountMax, c3[1] + (0 - c3[1]) * stage.player.damageCount / stage.player.damageCountMax, c3[2] + (0 - c3[2]) * stage.player.damageCount / stage.player.damageCountMax);
       triangle(stage.player.xPosition, stage.player.yPosition - 2, stage.player.xPosition - 14, stage.player.yPosition + 6, stage.player.xPosition + 14, stage.player.yPosition + 6);
     }
   }
   
   void drawChargeEffect(float[] c) {
-    if(abs(stage.player.charge - stage.player.chargeMax) < fps * 0.2 && stage.player.charge < (stage.player.chargeMax * 1.5)) {
+    if(abs(stage.player.charge - stage.player.chargeMax + fps * 0.2) < fps * 0.2 && stage.player.charge < (stage.player.chargeMax * 1.5)) {
+      ellipseMode(CENTER);
+      stroke(c[0], c[1], c[2], (stage.player.charge < stage.player.chargeMax) ? 128 : 128 - 128 * abs(stage.player.charge - stage.player.chargeMax + fps * 0.2) / (fps * 0.2));
+      strokeWeight(15 - 14 * (stage.player.charge - stage.player.chargeMax + fps * 0.2) / (fps * 0.2));
+      noFill();
+      ellipse(stage.player.xPosition, stage.player.yPosition, 7 - 6 * (stage.player.charge - stage.player.chargeMax + (fps * 0.2)), 7 - 6 * (stage.player.charge - stage.player.chargeMax + (fps * 0.2)));
+    }
+/*    if(abs(stage.player.charge - stage.player.chargeMax) < fps * 0.2 && stage.player.charge < (stage.player.chargeMax * 1.5)) {
       ellipseMode(CENTER);
       stroke(c[0], c[1], c[2], (stage.player.charge < stage.player.chargeMax) ? 128 : 128 - 128 * abs(stage.player.charge - stage.player.chargeMax) / (fps * 0.2));
       strokeWeight(15 - 14 * abs(stage.player.charge - stage.player.chargeMax) / (fps * 0.2));
       noFill();
       ellipse(stage.player.xPosition, stage.player.yPosition, 7 - 6 * (stage.player.charge - stage.player.chargeMax + (fps * 0.2)), 7 - 6 * (stage.player.charge - stage.player.chargeMax + (fps * 0.2)));
-    }
+    }*/
   }
   
   void draw400(Entity e, float[] c) {
@@ -330,5 +353,13 @@ class ViewController {
     fill(c[0], c[1], c[2], 40 + abs(e.count % (int)fps - fps / 2) / (fps / 2) * 120);
     noStroke();
     ellipse(e.xPosition, e.yPosition, e.size * 2, e.size * 2);
+  }
+  
+  void draw800(Effect e, float[] c) {
+    ellipseMode(CENTER);
+    stroke(c[0], c[1], c[2], 180 - 180 * e.count / e.countEnd);
+    strokeWeight(3 + 17 * e.count / e.countEnd);
+    noFill();
+    ellipse(e.xPosition, e.yPosition, 150 * e.count / e.countEnd, 150 * e.count / e.countEnd);
   }
 }

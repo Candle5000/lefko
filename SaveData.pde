@@ -1,6 +1,6 @@
 class SaveData {
   XML xml;
-  int highScore;
+  int bestScore;
   char upKey, downKey, leftKey, rightKey, enterKey, cancelKey, shiftKey, spcKey, escKey;
   int upCode, downCode, leftCode, rightCode, enterCode, cancelCode, shiftCode, spcCode, escCode;
   boolean mouseEnabled;
@@ -9,13 +9,13 @@ class SaveData {
     try {
       xml = loadXML("savedata.xml");
       loadConfig();
-      loadHighScore();
+      loadBestScore();
     } catch(NullPointerException e) {
       print("p1\n");
       xml = new XML("savedata");
       createSaveData();
       loadConfig();
-      loadHighScore();
+      loadBestScore();
     }
   }
   
@@ -42,11 +42,11 @@ class SaveData {
     escCode = config.getChild("esc").getInt("code");
   }
   
-  void loadHighScore() {
+  void loadBestScore() {
     try {
-      highScore = Integer.parseInt(xml.getChild("score").getContent());
+      bestScore = Integer.parseInt(xml.getChild("score").getContent());
     } catch(NumberFormatException e) {
-      highScore = 0;
+      bestScore = 0;
     }
   }
   
@@ -73,8 +73,8 @@ class SaveData {
     saveXML(xml, "data/savedata.xml");
   }
   
-  void saveHighScore() {
-    xml.getChild("score").setContent(String.valueOf(highScore));
+  void saveBestScore() {
+    xml.getChild("score").setContent(String.valueOf(bestScore));
     saveXML(xml, "data/savedata.xml");
   }
   

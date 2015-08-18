@@ -1,12 +1,12 @@
 class EnemyShot01 extends Entity {
   final float shotData[][] = {
     // image, damage, size, speed
-    {6001, 40, 3, 300},
-    {6021, 120, 10, 200},
-    {6002, 100, 3, 500},
-    {6003, 60, 3, 150},
-    {6003, 60, 3, 250},
-    {6031, 150, 30, 200}
+    {6001, 40, 3, 240},
+    {6021, 120, 10, 160},
+    {6002, 100, 3, 400},
+    {6003, 60, 3, 120},
+    {6003, 60, 3, 200},
+    {6031, 150, 30, 160}
   };
   float damage;
   Player player;
@@ -25,7 +25,7 @@ class EnemyShot01 extends Entity {
   void update() {
     vc.shot.add(this);
     move();
-    if(!friend && getDistance(player.xPosition, player.yPosition) <= (size + player.size)) {
+    if(!friend && isToutched(player) && player.damageCount == 0) {
       player.hit(damage);
       delFlag = true;
     } else if(friend) {

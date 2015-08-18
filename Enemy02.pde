@@ -29,7 +29,7 @@ public class Enemy02 extends Entity {
     move();
     
     // Shot
-    if((count > fps * 0.5) && ((count % fps == 0) || (count % fps == fps * 0.1) || (count % fps == fps * 0.2) || (count % fps == fps * 0.3)) && (yPosition < (scr.yStart + scr.getHeight() * 0.75))) {
+    if((count > fps * 0.5) && ((count % (fps * 2) == 0) || (count % (fps * 2) == fps * 0.1) || (count % (fps * 2) == fps * 0.2) || (count % (fps * 2) == fps * 0.3)) && (yPosition < (scr.yStart + scr.getHeight() * 0.75))) {
       entity.add(new EnemyShot01(0, xPosition, yPosition, getDirection(player), entity, scr, player));
     }
   }

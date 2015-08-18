@@ -9,7 +9,7 @@ public class PlayerShot03 extends Entity {
     direction = dir;
     subcount = 0;
     size = 5.5;
-    speed = 700 / fps;
+    speed = 680 / fps;
     friend = true;
   }
   
@@ -17,7 +17,7 @@ public class PlayerShot03 extends Entity {
     vc.shot.add(this);
     move();
     if(count > fps * 0.05) {
-      size -= subcount * 0.25;
+      size -= subcount * 25 / fps;
       if(size < 1) delFlag = true;
       count = 0;
       subcount++;
@@ -28,12 +28,12 @@ public class PlayerShot03 extends Entity {
         e.hit(damage);
         delFlag = true;
       } else if(!e.friend && !e.delFlag && e.canReflect && getDistance(e) <= (size * 1.5 + e.size) && e.size < 10) {
-        e.friend = true;
-        e.direction = e.direction - ((e.direction - direction) * 2 - radians(180));
-        size -= 0.1;
+        EnemyShot01 s = (EnemyShot01)e;
+        s.friend = true;
+        s.direction = s.direction - ((s.direction - direction) * 2 - radians(180));
+        size -= s.damage * 0.05;
         if(size < 1) delFlag = true;
         count = 0;
-        subcount++;
       }
     }
     count++;

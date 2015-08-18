@@ -26,6 +26,7 @@ void draw() {
   if(statement.id != nextState) {
     switch(nextState) {
       case TITLEMENU:
+        sd.loadConfig();
         statement = new TitleMenu();
         break;
       case STAGE:

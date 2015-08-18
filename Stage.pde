@@ -1,5 +1,5 @@
 class Stage extends Statement {
-  int score, scoreBorder, scene, eventFlag, boss;
+  int score, scoreBorder, nextBorder, scene, eventFlag, boss;
   ArrayList entity;
   Screen scr;
   Player player;
@@ -9,6 +9,7 @@ class Stage extends Statement {
     id = STAGE;
     score = 0;
     scoreBorder = 100;
+    nextBorder = scoreBorder;
     scene = 0;
     eventFlag = 0;
     boss = 0;
@@ -35,6 +36,7 @@ class Stage extends Statement {
             eventFlag = e.eventFlag;
           }
           score += e.score;
+          if(sd.bestScore < score) sd.bestScore = score;
           entity.remove(i);
         }
       }
@@ -74,7 +76,7 @@ class Stage extends Statement {
         count = -1;
       } else if(scene == 1 && score >= scoreBorder) {
         scene++;
-        scoreBorder += 100;
+        nextBorder += scoreBorder;
         count = -1;
       } else if(scene == 2 && eventFlag == 1) {
         scene--;
@@ -91,6 +93,7 @@ class Stage extends Statement {
       // タイトルに戻る
       if(scene == -1 && count > fps * 5) {
         if(mousePressed && mouseButton == LEFT) {
+          sd.saveBestScore();
           endFlag = true;
         }
         fadeOut();

@@ -29,8 +29,8 @@ public class Enemy01 extends Entity {
     move();
     
     // Shot
-    if((count > fps * 0.5) && (count % fps == 0) && (yPosition < (scr.yStart + scr.getHeight() * 0.75))) {
-      if(random(0,99) < 20) {
+    if((count > fps * 0.75) && (count % fps == 0) && (yPosition < (scr.yStart + scr.getHeight() * 0.75))) {
+      if(random(0,99) < 15) {
         entity.add(new EnemyShot01(0, xPosition, yPosition, getDirection(player), entity, scr, player));
         entity.add(new EnemyShot01(0, xPosition, yPosition, getDirection(player) + radians(15), entity, scr, player));
         entity.add(new EnemyShot01(0, xPosition, yPosition, getDirection(player) - radians(15), entity, scr, player));
