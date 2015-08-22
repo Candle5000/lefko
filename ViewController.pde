@@ -69,9 +69,19 @@ class ViewController {
   void update() {
     switch(statement.id) {
       case TITLEMENU:
+        cursor(ARROW);
         drawTitleMenu();
         break;
+      case CONFIG:
+        cursor(ARROW);
+        drawConfig();
+        break;
       case STAGE:
+        if(sd.mouseEnabled) {
+          cursor(CROSS);
+        } else {
+          noCursor();
+        }
         drawStage();
         break;
     }
@@ -81,6 +91,13 @@ class ViewController {
   void drawTitleMenu() {
     drawTitle(WHITE);
     for(int i = textButton.size() - 1; i >= 0; i--) {
+      drawTextButton((TextButton)textButton.get(i), WHITE, GREY);
+    }
+    textButton.clear();
+  }
+  
+  void drawConfig() {
+    for(int i = 0; i < textButton.size(); i++) {
       drawTextButton((TextButton)textButton.get(i), WHITE, GREY);
     }
     textButton.clear();
@@ -150,7 +167,6 @@ class ViewController {
     }
     
     drawPlayer(MINT_GREEN, LEMON_YELLOW, SNOW_WHITE);
-    //drawChargeEffect(CANARY_YELLOW);
     
     //draw PlayerEffect
     for(int i = effect.size() - 1; i >= 0; i--) {
@@ -177,22 +193,37 @@ class ViewController {
     textAlign(CENTER, CENTER);
     textSize(100);
     fill(fc[0], fc[1], fc[2]);
+    PFont font = loadFont("TakaoPMincho-255.vlw");
+    textFont(font, 100);
     text("Lefko", width * 0.5, height * 0.4);
+    textFont(defaultFont, 32);
   }
   
   void drawTextButton(TextButton tx, float[] fc, float[] sc) {
     // 枠描画
-    rectMode(CENTER);
     strokeWeight(tx.mouseOverFlag ? 3 : 1);
-    stroke(fc[0], fc[1], fc[2]);
+    if(tx.enabled) {
+      stroke(fc[0], fc[1], fc[2]);
+    } else {
+      stroke(abs(fc[0] - sc[0]) / 2, abs(fc[1] - sc[1]) / 2, abs(fc[2] - sc[2]) / 2);
+    }
     fill(sc[0], sc[1], sc[2]);
-    rect(tx.xPosition, tx.yPosition, tx.xSize, tx.ySize);
+    rectMode(tx.drawMode);
+    rect(tx.x1, tx.y1, tx.x2, tx.y2);
     
     // 文字描画
     textAlign(CENTER, CENTER);
     textSize(tx.textSize);
-    fill(fc[0], fc[1], fc[2]);
-    text(tx.text, tx.xPosition, tx.yPosition, tx.xSize, tx.ySize);
+    if(tx.enabled) {
+      fill(fc[0], fc[1], fc[2]);
+    } else {
+      fill(abs(fc[0] - sc[0]) / 2, abs(fc[1] - sc[1]) / 2, abs(fc[2] - sc[2]) / 2);
+    }
+    if(tx.drawMode == CENTER) {
+      text(tx.text, tx.x1, tx.y1, tx.x2, tx.y2);
+    } else if(tx.drawMode == CORNERS) {
+      text(tx.text, (tx.x1 + tx.x2) * 0.5, (tx.y1 + tx.y2) * 0.5, (tx.x2 - tx.x1) * 0.5, (tx.y2 - tx.y1) * 0.5);
+    }
   }
   
   void drawScreen(float[] sc) {
@@ -208,7 +239,7 @@ class ViewController {
   void drawPlayerInfo(float[] bc, float[] fc) {
     rectMode(CENTER);
     noStroke();
-    textSize(width * 0.02);
+    textSize(16);
     fill(bc[0], bc[1], bc[2]);
     rect(width * 0.1, height * 0.18, width * 0.16, height * 0.03);
     rect(width * 0.1, height * 0.24, width * 0.16, height * 0.03);
@@ -254,10 +285,11 @@ class ViewController {
       noStroke();
       if(!statement.startFlag) {
         // fade in
-        fill(0, 0, 0, (statement.fadeCount < fps) ? ((statement.fadeCount < fps * 0.2) ? 255 : 255 - 255 * (statement.fadeCount - fps * 0.2) / (fps - fps * 0.2)) : 0);
+        //fill(0, 0, 0, (statement.fadeCount < fps) ? ((statement.fadeCount < fps * 0.2) ? 255 : 255 - 255 * (statement.fadeCount - fps * 0.2) / (fps - fps * 0.2)) : 0);
+        fill(0, 0, 0, (statement.fadeCount < statement.fadeTime) ? ((statement.fadeCount < statement.fadeTime * 0.2) ? 255 : 255 - 255 * (statement.fadeCount - statement.fadeTime * 0.2) / (statement.fadeTime - statement.fadeTime * 0.2)) : 0);
       } else if(statement.endFlag) {
         // fade out
-        fill(0, 0, 0, (statement.fadeCount < fps * 0.8) ? 255 * statement.fadeCount / (fps * 0.8) : 255);
+        fill(0, 0, 0, (statement.fadeCount < statement.fadeTime * 0.8) ? 255 * statement.fadeCount / (statement.fadeTime * 0.8) : 255);
       }
       rect(-5, -5, width + 5, height + 5);
     }
@@ -275,23 +307,6 @@ class ViewController {
       fill(c3[0] + (255 - c3[0]) * stage.player.damageCount / stage.player.damageCountMax, c3[1] + (0 - c3[1]) * stage.player.damageCount / stage.player.damageCountMax, c3[2] + (0 - c3[2]) * stage.player.damageCount / stage.player.damageCountMax);
       triangle(stage.player.xPosition, stage.player.yPosition - 2, stage.player.xPosition - 14, stage.player.yPosition + 6, stage.player.xPosition + 14, stage.player.yPosition + 6);
     }
-  }
-  
-  void drawChargeEffect(float[] c) {
-    if(abs(stage.player.charge - stage.player.chargeMax + fps * 0.2) < fps * 0.2 && stage.player.charge < (stage.player.chargeMax * 1.5)) {
-      ellipseMode(CENTER);
-      stroke(c[0], c[1], c[2], (stage.player.charge < stage.player.chargeMax) ? 128 : 128 - 128 * abs(stage.player.charge - stage.player.chargeMax + fps * 0.2) / (fps * 0.2));
-      strokeWeight(15 - 14 * (stage.player.charge - stage.player.chargeMax + fps * 0.2) / (fps * 0.2));
-      noFill();
-      ellipse(stage.player.xPosition, stage.player.yPosition, 7 - 6 * (stage.player.charge - stage.player.chargeMax + (fps * 0.2)), 7 - 6 * (stage.player.charge - stage.player.chargeMax + (fps * 0.2)));
-    }
-/*    if(abs(stage.player.charge - stage.player.chargeMax) < fps * 0.2 && stage.player.charge < (stage.player.chargeMax * 1.5)) {
-      ellipseMode(CENTER);
-      stroke(c[0], c[1], c[2], (stage.player.charge < stage.player.chargeMax) ? 128 : 128 - 128 * abs(stage.player.charge - stage.player.chargeMax) / (fps * 0.2));
-      strokeWeight(15 - 14 * abs(stage.player.charge - stage.player.chargeMax) / (fps * 0.2));
-      noFill();
-      ellipse(stage.player.xPosition, stage.player.yPosition, 7 - 6 * (stage.player.charge - stage.player.chargeMax + (fps * 0.2)), 7 - 6 * (stage.player.charge - stage.player.chargeMax + (fps * 0.2)));
-    }*/
   }
   
   void draw400(Entity e, float[] c) {
@@ -357,9 +372,13 @@ class ViewController {
   
   void draw800(Effect e, float[] c) {
     ellipseMode(CENTER);
-    stroke(c[0], c[1], c[2], 180 - 180 * e.count / e.countEnd);
-    strokeWeight(3 + 17 * e.count / e.countEnd);
     noFill();
+    stroke(c[0], c[1], c[2], 60 - 60 * e.count / e.countEnd);
+    strokeWeight(3 + 17 * e.count / e.countEnd);
+    ellipse(e.xPosition, e.yPosition, 150 * e.count / e.countEnd, 150 * e.count / e.countEnd);
+    strokeWeight(7 + 17 * e.count / e.countEnd);
+    ellipse(e.xPosition, e.yPosition, 150 * e.count / e.countEnd, 150 * e.count / e.countEnd);
+    strokeWeight(11 + 17 * e.count / e.countEnd);
     ellipse(e.xPosition, e.yPosition, 150 * e.count / e.countEnd, 150 * e.count / e.countEnd);
   }
 }

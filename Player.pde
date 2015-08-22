@@ -19,7 +19,7 @@ class Player extends Entity {
     speed = SPEED_N / fps;
     enReg = 60 / fps;
     damageCount = 0;
-    damageCountMax = (int)(0.5 * fps);
+    damageCountMax = (int)(fps);
     friend = true;
     shotFlag = false;
     changeFlag = false;

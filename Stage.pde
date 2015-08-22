@@ -74,7 +74,7 @@ class Stage extends Statement {
       if(scene == 0 && count > fps * 2) {
         scene++;
         count = -1;
-      } else if(scene == 1 && score >= scoreBorder) {
+      } else if(scene == 1 && score >= nextBorder) {
         scene++;
         nextBorder += scoreBorder;
         count = -1;

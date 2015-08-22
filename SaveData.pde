@@ -1,25 +1,122 @@
 class SaveData {
   XML xml;
-  int bestScore;
+  int bestScore, inputType;
   char upKey, downKey, leftKey, rightKey, enterKey, cancelKey, shiftKey, spcKey, escKey;
   int upCode, downCode, leftCode, rightCode, enterCode, cancelCode, shiftCode, spcCode, escCode;
   boolean mouseEnabled;
+  static final int TYPE_A = 0;
+  static final int TYPE_B = 1;
+  static final int TYPE_C = 2;
+  static final int TYPE_CUSTOM = 3;
   
   SaveData() {
     try {
       xml = loadXML("savedata.xml");
+      inputType = xml.getChild("config").getInt("type");
       loadConfig();
       loadBestScore();
     } catch(NullPointerException e) {
       print("p1\n");
       xml = new XML("savedata");
       createSaveData();
+      inputType = xml.getChild("config").getInt("type");
       loadConfig();
       loadBestScore();
     }
   }
   
   void loadConfig() {
+    switch(inputType) {
+      case TYPE_A:
+        setConfigTypeA();
+        break;
+      case TYPE_B:
+        setConfigTypeB();
+        break;
+      case TYPE_C:
+        setConfigTypeC();
+        break;
+      default:
+        setConfigCustom();
+        break;
+    }
+  }
+  
+  void loadBestScore() {
+    try {
+      bestScore = Integer.parseInt(xml.getChild("score").getContent());
+    } catch(NumberFormatException e) {
+      bestScore = 0;
+    }
+  }
+  
+  void saveConfig() {
+    XML config = xml.getChild("config");
+    config.setInt("type", inputType);
+    if(inputType == TYPE_CUSTOM) {
+      config.getChild("mouse").setContent(mouseEnabled ? "true" : "false");
+      config.getChild("up").setString("key", String.valueOf(upKey));
+      config.getChild("up").setInt("code", upCode);
+      config.getChild("down").setString("key", String.valueOf(downKey));
+      config.getChild("down").setInt("code", downCode);
+      config.getChild("left").setString("key", String.valueOf(leftKey));
+      config.getChild("left").setInt("code", leftCode);
+      config.getChild("right").setString("key", String.valueOf(rightKey));
+      config.getChild("right").setInt("code", rightCode);
+      config.getChild("enter").setString("key", String.valueOf(enterKey));
+      config.getChild("enter").setInt("code", enterCode);
+      config.getChild("cancel").setString("key", String.valueOf(cancelKey));
+      config.getChild("cancel").setInt("code", cancelCode);
+      config.getChild("shift").setString("key", String.valueOf(shiftKey));
+      config.getChild("shift").setInt("code", shiftCode);
+      config.getChild("spc").setString("key", String.valueOf(spcKey));
+      config.getChild("spc").setInt("code", spcCode);
+      config.getChild("esc").setString("key", String.valueOf(escKey));
+      config.getChild("esc").setInt("code", escCode);
+    }
+    saveXML(xml, "data/savedata.xml");
+  }
+  
+  void saveBestScore() {
+    xml.getChild("score").setContent(String.valueOf(bestScore));
+    saveXML(xml, "data/savedata.xml");
+  }
+  
+  void setConfig(boolean mouse, char upK, int upC, char downK, int downC, char leftK, int leftC, char rightK, int rightC, char enterK, int enterC, char cancelK, int cancelC, char shiftK, int shiftC, char spcK, int spcC, char escK, int escC) {
+    mouseEnabled = mouse;
+    upKey = upK;
+    upCode = upC;
+    downKey = downK;
+    downCode = downC;
+    leftKey = leftK;
+    leftCode = leftC;
+    rightKey = rightK;
+    rightCode = rightC;
+    enterKey = enterK;
+    enterCode = enterC;
+    cancelKey = cancelK;
+    cancelCode = cancelC;
+    shiftKey = shiftK;
+    shiftCode = shiftC;
+    spcKey = spcK;
+    spcCode = spcC;
+    escKey = escK;
+    escCode = escC;
+  }
+  
+  void setConfigTypeA() {
+    setConfig(true, (char)CODED, UP, (char)CODED, DOWN, (char)CODED, LEFT, (char)CODED, RIGHT, 'z', 0, 'x', 0, (char)CODED, SHIFT, ' ', 0, (char)CODED, ESC);
+  }
+  
+  void setConfigTypeB() {
+    setConfig(false, (char)CODED, UP, (char)CODED, DOWN, (char)CODED, LEFT, (char)CODED, RIGHT, 'z', 0, 'x', 0, (char)CODED, SHIFT, ' ', 0, (char)CODED, ESC);
+  }
+  
+  void setConfigTypeC() {
+    setConfig(false, 'w', 0, 's', 0, 'a', 0, 'd', 0, 'j', 0, 'k', 0, 'l', 0, ' ', 0, (char)CODED, ESC);
+  }
+  
+  void setConfigCustom() {
     XML config = xml.getChild("config");
     mouseEnabled = config.getChild("mouse").getContent().equals("true");
     upKey = (config.getChild("up").getString("key") == "CODED") ? (char)CODED : config.getChild("up").getString("key").charAt(0);
@@ -42,65 +139,9 @@ class SaveData {
     escCode = config.getChild("esc").getInt("code");
   }
   
-  void loadBestScore() {
-    try {
-      bestScore = Integer.parseInt(xml.getChild("score").getContent());
-    } catch(NumberFormatException e) {
-      bestScore = 0;
-    }
-  }
-  
-  void saveConfig() {
-    XML config = xml.getChild("config");
-    config.getChild("up").setString("key", String.valueOf(upKey));
-    config.getChild("up").setInt("code", upCode);
-    config.getChild("down").setString("key", String.valueOf(downKey));
-    config.getChild("down").setInt("code", downCode);
-    config.getChild("left").setString("key", String.valueOf(leftKey));
-    config.getChild("left").setInt("code", leftCode);
-    config.getChild("right").setString("key", String.valueOf(rightKey));
-    config.getChild("right").setInt("code", rightCode);
-    config.getChild("enter").setString("key", String.valueOf(enterKey));
-    config.getChild("enter").setInt("code", enterCode);
-    config.getChild("cancel").setString("key", String.valueOf(cancelKey));
-    config.getChild("cancel").setInt("code", cancelCode);
-    config.getChild("shift").setString("key", String.valueOf(shiftKey));
-    config.getChild("shift").setInt("code", shiftCode);
-    config.getChild("spc").setString("key", String.valueOf(spcKey));
-    config.getChild("spc").setInt("code", spcCode);
-    config.getChild("esc").setString("key", String.valueOf(escKey));
-    config.getChild("esc").setInt("code", escCode);
-    saveXML(xml, "data/savedata.xml");
-  }
-  
-  void saveBestScore() {
-    xml.getChild("score").setContent(String.valueOf(bestScore));
-    saveXML(xml, "data/savedata.xml");
-  }
-  
-  void setDefaultConfig() {
-    upKey = (char)CODED;
-    upCode = UP;
-    downKey = (char)CODED;
-    downCode = DOWN;
-    leftKey = (char)CODED;
-    leftCode = LEFT;
-    rightKey = (char)CODED;
-    rightCode = RIGHT;
-    enterKey = 'z';
-    enterCode = 0;
-    cancelKey = 'x';
-    cancelCode = 0;
-    shiftKey = (char)CODED;
-    shiftCode = SHIFT;
-    spcKey = ' ';
-    spcCode = 0;
-    escKey = (char)CODED;
-    escCode = ESC;
-  }
-  
   void createSaveData() {
     XML config = xml.addChild("config");
+    config.setInt("type", TYPE_A);
     config.addChild("mouse").setContent("true");
     XML up = config.addChild("up");
     up.setString("key", "CODED");
