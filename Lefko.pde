@@ -17,7 +17,7 @@ void setup() {
   size(800, 800);
   smooth();
   frameRate(fps);
-  defaultFont = loadFont("TakaoPGothic-128.vlw");
+  defaultFont = loadFont("TakaoGothic-64.vlw");
   textFont(defaultFont, 32);
   sd = new SaveData();
   vc = new ViewController();

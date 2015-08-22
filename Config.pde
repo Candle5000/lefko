@@ -1,24 +1,29 @@
 class Config extends Statement {
+  float buttonWidth, buttonHeight;
   TextButton type, mouse, up, down, left, right, enter, cancel, shift, spc, esc, quit;
   ArrayList<TextButton> buttons;
   
   Config() {
     super();
     id = CONFIG;
+    buttonWidth = 260;
+    buttonHeight = 40;
+    float bx = buttonWidth * 0.5 + buttonHeight * 0.25;
+    float by = buttonHeight * 1.5;
     sd.loadConfig();
     buttons = new ArrayList<TextButton>();
-    buttons.add(type = new TextButton("", 20, width * 0.5 - 130, height * 0.5 - 180, 240, 40, true));
-    buttons.add(mouse = new TextButton("", 20, width * 0.5 + 130, height * 0.5 - 180, 240, 40, false));
-    buttons.add(up = new TextButton("", 20, width * 0.5 - 130, height * 0.5 - 120, 240, 40, false));
-    buttons.add(down = new TextButton("", 20, width * 0.5 + 130, height * 0.5 - 120, 240, 40, false));
-    buttons.add(left = new TextButton("", 20, width * 0.5 - 130, height * 0.5 - 60, 240, 40, false));
-    buttons.add(right = new TextButton("", 20, width * 0.5 + 130, height * 0.5 - 60, 240, 40, false));
-    buttons.add(enter = new TextButton("", 20, width * 0.5 - 130, height * 0.5, 240, 40, false));
-    buttons.add(cancel = new TextButton("", 20, width * 0.5 + 130, height * 0.5, 240, 40, false));
-    buttons.add(shift = new TextButton("", 20, width * 0.5 - 130, height * 0.5 + 60, 240, 40, false));
-    buttons.add(spc = new TextButton("", 20, width * 0.5 + 130, height * 0.5 + 60, 240, 40, false));
-    buttons.add(esc = new TextButton("", 20, width * 0.5 - 130, height * 0.5 + 120, 240, 40, false));
-    buttons.add(quit = new TextButton("完了", 20, width * 0.5, height * 0.5 + 180, 240, 40, true));
+    buttons.add(type = new TextButton("", 20, width * 0.5 - bx, height * 0.5 - by * 3, buttonWidth, buttonHeight, true));
+    buttons.add(mouse = new TextButton("", 20, width * 0.5 + bx, height * 0.5 - by * 3, buttonWidth, buttonHeight, false));
+    buttons.add(up = new TextButton("", 20, width * 0.5 - bx, height * 0.5 - by * 2, buttonWidth, buttonHeight, false));
+    buttons.add(down = new TextButton("", 20, width * 0.5 + bx, height * 0.5 - by * 2, buttonWidth, buttonHeight, false));
+    buttons.add(left = new TextButton("", 20, width * 0.5 - bx, height * 0.5 - by, buttonWidth, buttonHeight, false));
+    buttons.add(right = new TextButton("", 20, width * 0.5 + bx, height * 0.5 - by, buttonWidth, buttonHeight, false));
+    buttons.add(enter = new TextButton("", 20, width * 0.5 - bx, height * 0.5, buttonWidth, buttonHeight, false));
+    buttons.add(cancel = new TextButton("", 20, width * 0.5 + bx, height * 0.5, buttonWidth, buttonHeight, false));
+    buttons.add(shift = new TextButton("", 20, width * 0.5 - bx, height * 0.5 + by, buttonWidth, buttonHeight, false));
+    buttons.add(spc = new TextButton("", 20, width * 0.5 + bx, height * 0.5 + by, buttonWidth, buttonHeight, false));
+    buttons.add(esc = new TextButton("", 20, width * 0.5 - bx, height * 0.5 + by * 2, buttonWidth, buttonHeight, false));
+    buttons.add(quit = new TextButton("完了", 20, width * 0.5, height * 0.5 + by * 3, buttonWidth, buttonHeight, true));
   }
   
   void update() {
@@ -84,14 +89,13 @@ class Config extends Statement {
   
   void changeInputType() {
     sd.inputType = (sd.inputType < SaveData.TYPE_C) ? sd.inputType + 1 : SaveData.TYPE_A;
-    println(sd.inputType);
     sd.loadConfig();
     type.workFlag = false;
   }
   
   String getKeyName(char tmpKey, int tmpCode) {
     if(tmpKey != CODED) {
-      return((tmpKey == ' ') ? "SPACE" : String.valueOf(tmpKey));
+      return((tmpKey == ' ') ? "SPACE" : String.valueOf(Character.toUpperCase(tmpKey)));
     } else {
       if(tmpCode == UP) return("↑");
       if(tmpCode == DOWN) return("↓");
