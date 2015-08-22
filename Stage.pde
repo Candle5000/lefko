@@ -92,7 +92,7 @@ class Stage extends Statement {
       
       // タイトルに戻る
       if(scene == -1 && count > fps * 5) {
-        if(mousePressed && mouseButton == LEFT) {
+        if(mousePressed || keyPressed) {
           sd.saveBestScore();
           endFlag = true;
         }

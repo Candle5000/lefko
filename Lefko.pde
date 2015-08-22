@@ -21,7 +21,6 @@ void setup() {
   textFont(defaultFont, 32);
   sd = new SaveData();
   vc = new ViewController();
-  kc = new KeyController();
   statement = new TitleMenu();
 }
 
@@ -31,12 +30,14 @@ void draw() {
     switch(nextState) {
       case TITLEMENU:
         sd.loadConfig();
+        kc = new KeyController();
         statement = new TitleMenu();
         break;
       case CONFIG:
         statement = new Config();
         break;
       case STAGE:
+        kc = new KeyController();
         statement = new Stage();
         break;
     }
